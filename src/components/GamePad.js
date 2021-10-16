@@ -24,7 +24,7 @@ GamePad.propTypes = {
   randomNumbers: PropTypes.array.isRequired
 };
 
-export default GamePad;
+export default React.memo(GamePad);
 
 const styles = StyleSheet.create({
   container: {

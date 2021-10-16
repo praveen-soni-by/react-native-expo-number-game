@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect ,useCallback } from "react";
 import {
   StyleSheet,
   View,
@@ -13,7 +13,7 @@ import shuffle from "lodash.shuffle";
 import GamePad from "./GamePad";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 
-const COUNTER = 20;
+const COUNTER = 200;
 const SUCCESS = "Winner Winner Thanos dinner";
 const FAILED = "You Lost the game !!";
 
@@ -59,14 +59,16 @@ export default function Game(props) {
     return () => clearInterval(timer);
   }, [counter]);
 
-  const selectNumber = (index) => {
+  const selectNumber =useCallback((index) => {
     if (isSoundOn) {
       playSound();
     }
     setSelectedIds((prev) => [...prev, index]);
-  };
+  },[selectedIds]);
 
   function checkResult() {
+    console.log("checkResult")
+
     const sum = selectedIds.reduce((acc, curr) => acc + randomNumbers[curr], 0);
     var msg;
     if (sum > targetNumber || (sum != targetNumber && counter == 0)) {
@@ -99,9 +101,9 @@ export default function Game(props) {
     setCounter(COUNTER);
   }
 
-  function isNumberSelected(index) {
+  const isNumberSelected=useCallback((index)=> {
     return selectedIds.indexOf(index) > -1;
-  }
+  },[selectedIds])
 
   return (
     <ImageBackground
