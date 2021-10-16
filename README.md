@@ -29,6 +29,5 @@ Logic : Have to select number whose sum is equal to the given number(target numb
 Eg: 74 
 Solution : 15 + 25+ 27+3+4
 ```
+<img src="https://user-images.githubusercontent.com/86279438/137579391-02f58713-b5fe-4855-8304-f1e856f92ec8.jpeg" width="200"> <img src="https://user-images.githubusercontent.com/86279438/137579393-85709c49-8fb5-40a0-983f-c0a8df225b0d.jpeg" width="200"> <img src="https://user-images.githubusercontent.com/86279438/137579396-a37a69a9-8138-4453-a3e9-32211886491b.jpeg" width="200">
 
-![WhatsApp Image 2021-10-15 at 7 25 05 PM (1)](https://user-images.githubusercontent.com/86279438/137498860-9d4998ef-72cc-4dfc-84b2-b018c0a7f47c.jpeg)
-![WhatsApp Image 2021-10-15 at 7 25 05 PM](https://user-images.githubusercontent.com/86279438/137498898-dfea0ab0-5976-467c-93f1-4936a209a9d7.jpeg)

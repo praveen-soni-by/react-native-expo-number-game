@@ -13,7 +13,7 @@ import shuffle from "lodash.shuffle";
 import GamePad from "./GamePad";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 
-const COUNTER = 200;
+const COUNTER = 20;
 const SUCCESS = "Winner Winner Thanos dinner";
 const FAILED = "You Lost the game !!";
 
@@ -24,18 +24,49 @@ export default function Game(props) {
   const [selectedIds, setSelectedIds] = useState([]);
   const [sound, setSound] = React.useState();
   const [isSoundOn, setSoundOn] = React.useState(true);
+  const [winnerSound, setWinnerSound] = React.useState();
+  const [looserSound, setLooserSound] = React.useState();
+
+  async function playWinnerSound() {
+    const { sound } = await Audio.Sound.createAsync(
+      require("../../assets/sound/Winner.mp3")
+    );
+    setWinnerSound(sound);
+    await sound.playAsync();
+  }
+
+  React.useEffect(() => {
+    return winnerSound
+      ? () => {
+          winnerSound.unloadAsync();
+        }
+      : undefined;
+  }, [targetNumber,winnerSound]);
+
+  
+  async function playLooserSound() {
+    const { sound } = await Audio.Sound.createAsync(
+      require("../../assets/sound/looser_tone.mp3")
+    );
+    setLooserSound(sound);
+    await sound.playAsync();
+  }
+  
+  React.useEffect(() => {
+    return looserSound
+      ? () => {
+        looserSound.unloadAsync();
+        }
+      : undefined;
+  }, [targetNumber,looserSound]);
 
   async function playSound() {
     const { sound } = await Audio.Sound.createAsync(
-      require("../../assets/sound/mixkit-soft-horror-hit-drum-564.wav")
+      require("../../assets/sound/keypad.wav")
     );
     setSound(sound);
     await sound.playAsync();
   }
-  // Initial game board
-  useEffect(() => {
-    createGameBoard();
-  }, []);
 
   React.useEffect(() => {
     return sound
@@ -43,7 +74,13 @@ export default function Game(props) {
           sound.unloadAsync();
         }
       : undefined;
-  }, [sound]);
+  }, [targetNumber,sound]);
+
+  // Initial game board
+  useEffect(() => {
+    createGameBoard();
+  }, []);
+
 
   useEffect(() => {
     checkResult();
@@ -54,6 +91,7 @@ export default function Game(props) {
       setCounter(counter - 1);
     }, 1000);
     if (counter == 0) {
+      checkResult();
       clearInterval(timer);
     }
     return () => clearInterval(timer);
@@ -67,15 +105,19 @@ export default function Game(props) {
   },[selectedIds]);
 
   function checkResult() {
-    console.log("checkResult")
-
     const sum = selectedIds.reduce((acc, curr) => acc + randomNumbers[curr], 0);
     var msg;
     if (sum > targetNumber || (sum != targetNumber && counter == 0)) {
       msg = FAILED;
+      if (isSoundOn) {
+      playLooserSound();
+      }
     }
     if (sum === targetNumber) {
       msg = SUCCESS;
+      if (isSoundOn) {
+      playWinnerSound();
+      }
     }
     if (msg) {
       Alert.alert("", msg, [
@@ -86,6 +128,7 @@ export default function Game(props) {
   }
   // Initial game board , reset game board
   function createGameBoard() {
+    setCounter(COUNTER);
     const randomNumbers = Array.from(
       { length: props.randomNumberLenght },
       () => 1 + Math.floor(Math.random() * 30)
@@ -98,7 +141,6 @@ export default function Game(props) {
     setTargetNumber(targetNumber);
     setRandomNumber(shuffle(randomNumbers));
     setSelectedIds([]);
-    setCounter(COUNTER);
   }
 
   const isNumberSelected=useCallback((index)=> {
@@ -106,6 +148,7 @@ export default function Game(props) {
   },[selectedIds])
 
   return (
+
     <ImageBackground
       style={{ flex: 1 }}
       source={require("../../assets/background.jpg")}
@@ -128,7 +171,7 @@ export default function Game(props) {
           <FontAwesome5
             name={isSoundOn ? "volume-up" : "volume-mute"}
             size={30}
-            color="white"
+            color="black"
           />
         </TouchableOpacity>
       </View>
@@ -139,6 +182,7 @@ export default function Game(props) {
         selectNumber={selectNumber}
       />
     </ImageBackground>
+    
   );
 }
 
@@ -148,20 +192,20 @@ const styles = StyleSheet.create({
   },
 
   text: {
-    color: "white",
+    color: "black",
     fontWeight: "bold",
     fontSize: 44,
   },
   infoContainer: {
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#5a7fab",
+    backgroundColor: "#eeeeee",
     padding: 20,
     marginVertical: 120,
   },
   infoText: {
     fontSize: 20,
-    color: "white",
+    color: "black",
   },
   playContiner: {
     padding: 25,
@@ -176,22 +220,22 @@ const styles = StyleSheet.create({
   },
 
   timerContainer: {
-    width: 60,
-    height: 60,
+    width: 50,
+    height: 50,
     backgroundColor:"#37474F",
     justifyContent: "center",
     alignItems: "center",
     alignSelf: "flex-end",
     borderRadius: 40,
-    marginHorizontal: 3,
     marginVertical: 15,
     position: "absolute",
   },
+
   timer: {
     color: "white",
     padding: 2,
     fontWeight: "500",
-    fontSize: 22,
+    fontSize: 22
   },
 
   targetContainer: {

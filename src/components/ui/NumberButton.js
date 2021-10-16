@@ -31,8 +31,8 @@ export default NumberButton;
 
 const styles = StyleSheet.create({
   buttonContainer: {
-    backgroundColor: "#0d1539",
-    borderColor: "#6087b2",
+    backgroundColor: "#e0e0e0",
+    borderColor: "white",
     borderWidth: 5,
     width: 80,
     justifyContent: "center",
@@ -40,17 +40,17 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
     marginVertical: 10,
     height: 80,
-    borderRadius: 20,
+    borderRadius: 34,
     elevation: 10,
     shadowColor: "#FF1744",
   },
   text: {
-    color: "white",
+    color: "black",
     fontSize: 30,
     textAlign: "center",
     textAlignVertical: "center",
   },
   selected: {
-    opacity: 0.4,
+    opacity: 0.2,
   },
 });
