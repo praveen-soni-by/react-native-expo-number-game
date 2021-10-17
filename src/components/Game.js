@@ -97,7 +97,7 @@ export default function Game(props) {
     return () => clearInterval(timer);
   }, [counter]);
 
-  const selectNumber =useCallback((index) => {
+  const selectNumber = useCallback((index) => {
     if (isSoundOn) {
       playSound();
     }
